@@ -98,81 +98,81 @@ __sdcc_program_startup:
 ;	-----------------------------------------
 _delay_ms:
 	sub	sp, #2
-;	main.c: 8: while (u16Delay) {
+;	main.c: 8: while (u16Delay)
 	ldw	y, (0x05, sp)
 	ldw	(0x01, sp), y
 00104$:
 	ldw	x, (0x01, sp)
 	jreq	00107$
-;	main.c: 9: TIM4_SetCounter(0);
+;	main.c: 10: TIM4_SetCounter(0);
 	push	#0x00
 	call	_TIM4_SetCounter
 	pop	a
-;	main.c: 10: TIM4_ClearFlag(TIM4_FLAG_UPDATE);
+;	main.c: 11: TIM4_ClearFlag(TIM4_FLAG_UPDATE);
 	push	#0x01
 	call	_TIM4_ClearFlag
 	pop	a
-;	main.c: 11: while (TIM4_GetFlagStatus(TIM4_FLAG_UPDATE) == RESET) {
+;	main.c: 12: while (TIM4_GetFlagStatus(TIM4_FLAG_UPDATE) == RESET)
 00101$:
 	push	#0x01
 	call	_TIM4_GetFlagStatus
 	addw	sp, #1
 	tnz	a
 	jreq	00101$
-;	main.c: 13: --u16Delay;
+;	main.c: 15: --u16Delay;
 	ldw	x, (0x01, sp)
 	decw	x
 	ldw	(0x01, sp), x
 	jra	00104$
 00107$:
-;	main.c: 15: }
+;	main.c: 17: }
 	addw	sp, #2
 	ret
-;	main.c: 17: void main(void)
+;	main.c: 19: void main(void)
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	main.c: 20: CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
+;	main.c: 22: CLK_HSIPrescalerConfig(CLK_PRESCALER_HSIDIV1);
 	push	#0x00
 	call	_CLK_HSIPrescalerConfig
 	pop	a
-;	main.c: 21: GPIO_DeInit(GPIOB);
+;	main.c: 23: GPIO_DeInit(GPIOB);
 	push	#0x05
 	push	#0x50
 	call	_GPIO_DeInit
 	addw	sp, #2
-;	main.c: 22: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);
+;	main.c: 24: GPIO_Init(GPIOB, GPIO_PIN_5, GPIO_MODE_OUT_PP_LOW_FAST);
 	push	#0xe0
 	push	#0x20
 	push	#0x05
 	push	#0x50
 	call	_GPIO_Init
 	addw	sp, #4
-;	main.c: 23: TIM4_TimeBaseInit(TIM4_PRESCALER_128, 125 - 1);
+;	main.c: 25: TIM4_TimeBaseInit(TIM4_PRESCALER_128, 125 - 1);
 	push	#0x7c
 	push	#0x07
 	call	_TIM4_TimeBaseInit
 	addw	sp, #2
-;	main.c: 24: TIM4_Cmd(ENABLE);
+;	main.c: 26: TIM4_Cmd(ENABLE);
 	push	#0x01
 	call	_TIM4_Cmd
 	pop	a
-;	main.c: 26: while(1) {
+;	main.c: 28: while (1)
 00102$:
-;	main.c: 27: delay_ms(500);
-	push	#0xf4
-	push	#0x01
+;	main.c: 30: delay_ms(1000);
+	push	#0xe8
+	push	#0x03
 	call	_delay_ms
 	addw	sp, #2
-;	main.c: 28: GPIO_WriteReverse(GPIOB, GPIO_PIN_5);
+;	main.c: 31: GPIO_WriteReverse(GPIOB, GPIO_PIN_5);
 	push	#0x20
 	push	#0x05
 	push	#0x50
 	call	_GPIO_WriteReverse
 	addw	sp, #3
 	jra	00102$
-;	main.c: 30: }
+;	main.c: 33: }
 	ret
 	.area CODE
 	.area CONST
